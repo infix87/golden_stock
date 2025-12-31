@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import FavoritesPage from './pages/FavoritesPage';
-import { Activity, Star } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
 function NavBar() {
   const location = useLocation();

@@ -28,7 +28,6 @@ interface StockDetailData {
 export default function HomePage() {
     const [stocks, setStocks] = useState<Stock[]>([]);
     const [selectedStock, setSelectedStock] = useState<StockDetailData | null>(null);
-    const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
 
     const fetchStocks = async () => {
@@ -56,14 +55,11 @@ export default function HomePage() {
     };
 
     const handleStockClick = async (code: string) => {
-        setLoading(true);
         try {
             const res = await axios.get(`http://localhost:8000/api/stocks/${code}`);
             setSelectedStock(res.data);
         } catch (e) {
             console.error(e);
-        } finally {
-            setLoading(false);
         }
     };
 
