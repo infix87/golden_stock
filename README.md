@@ -102,3 +102,25 @@ cd ../frontend
 npm install
 npm run build
 ```
+
+### 5. PM2로 실행하기 (Recommended)
+Node.js 프로세스 관리 도구인 PM2를 사용하면 백엔드와 프론트엔드를 한 번에 관리하고, 서버 재부팅 시 자동 실행되게 할 수 있습니다.
+
+```bash
+# 1. PM2 설치 (전역 설치)
+npm install -g pm2
+
+# 2. 프로젝트 루트로 이동
+cd stock-investment-helper
+
+# 3. PM2로 실행 (ecosystem.config.js 설정 사용)
+pm2 start ecosystem.config.js
+
+# 상태 확인
+pm2 status
+pm2 logs
+
+# 변경사항 적용 후 재시작
+pm2 restart all
+```
+
