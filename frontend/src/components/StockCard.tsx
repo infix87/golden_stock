@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
+import { Star, ExternalLink } from 'lucide-react';
 
 interface StockProps {
     id: number;
@@ -44,10 +44,22 @@ export default function StockCard({ code, name, price, golden_cross_date, is_fav
                 </div>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-50 flex justify-between items-center">
-                <span className="text-xs text-gray-400">Detected Date</span>
-                <span className="text-xs font-medium text-gray-600 font-mono bg-gray-100 px-2 py-1 rounded">
-                    {golden_cross_date}
-                </span>
+                <div className="flex flex-col">
+                    <span className="text-xs text-gray-400">Detected Date</span>
+                    <span className="text-xs font-medium text-gray-600 font-mono">
+                        {golden_cross_date}
+                    </span>
+                </div>
+                <a
+                    href={`https://finance.naver.com/item/main.naver?code=${code}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1.5 bg-green-50 text-green-700 px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-green-100 transition-colors"
+                >
+                    Chart
+                    <ExternalLink className="w-3 h-3" />
+                </a>
             </div>
         </motion.div>
     );
