@@ -6,7 +6,7 @@ from services.stock_collector import fetch_golden_cross_stocks
 from services.news_scraper import fetch_news
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import Session
-from datetime import datetime
+from datetime import datetime, timedelta
 import threading
 
 # Create DB tables
@@ -57,6 +57,25 @@ def update_job():
                 existing.price = item['price']
                 existing.golden_cross_date = datetime.now().date().isoformat() # Update date
         db.commit()
+        db.commit()
+        
+        # Cleanup old non-favorite stocks (older than 7 days)
+        print(f"[{datetime.now()}] Cleaning up old stocks...")
+        all_stocks = db.query(Stock).filter(Stock.is_favorite == False).all()
+        deadline = datetime.now() - timedelta(days=7)
+        deleted_count = 0
+        
+        for stock in all_stocks:
+            try:
+                stock_date = datetime.strptime(stock.golden_cross_date, "%Y-%m-%d")
+                if stock_date < deadline:
+                    db.delete(stock)
+                    deleted_count += 1
+            except ValueError:
+                continue # Skip invalid date formats
+        
+        db.commit()
+        print(f"[{datetime.now()}] Cleanup complete. Deleted {deleted_count} old stocks.")
         print(f"[{datetime.now()}] Database update complete.")
     except Exception as e:
         print(f"Update job failed: {e}")
@@ -69,7 +88,7 @@ scheduler.start()
 @app.get("/api/stocks")
 def get_stocks():
     db = SessionLocal()
-    stocks = db.query(Stock).all()
+    stocks = db.query(Stock).order_by(Stock.golden_cross_date.desc()).all()
     db.close()
     return stocks
 
