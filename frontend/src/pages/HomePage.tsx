@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import StockCard from '../components/StockCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../constants';
 
 // Types (should be centralized ideally)
 interface Stock {
@@ -32,7 +33,7 @@ export default function HomePage() {
 
     const fetchStocks = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/api/stocks');
+            const res = await axios.get(`${API_BASE_URL}/api/stocks`);
             setStocks(res.data);
         } catch (e) {
             console.error(e);
@@ -42,7 +43,7 @@ export default function HomePage() {
     const handleRefresh = async () => {
         setRefreshing(true);
         try {
-            await axios.post('http://localhost:8000/api/refresh');
+            await axios.post(`${API_BASE_URL}/api/refresh`);
             setTimeout(() => {
                 fetchStocks();
                 setRefreshing(false);
@@ -56,7 +57,7 @@ export default function HomePage() {
 
     const handleStockClick = async (code: string) => {
         try {
-            const res = await axios.get(`http://localhost:8000/api/stocks/${code}`);
+            const res = await axios.get(`${API_BASE_URL}/api/stocks/${code}`);
             setSelectedStock(res.data);
         } catch (e) {
             console.error(e);
@@ -66,7 +67,7 @@ export default function HomePage() {
     const handleToggleFavorite = async (e: React.MouseEvent, code: string) => {
         e.stopPropagation();
         try {
-            const res = await axios.post(`http://localhost:8000/api/stocks/${code}/favorite`);
+            const res = await axios.post(`${API_BASE_URL}/api/stocks/${code}/favorite`);
             // Optimistic update locally
             setStocks(prev => prev.map(s => s.code === code ? { ...s, is_favorite: res.data.is_favorite } : s));
 

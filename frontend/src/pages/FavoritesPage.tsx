@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import StockCard from '../components/StockCard';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../constants';
 
 interface Stock {
     id: number;
@@ -30,7 +31,7 @@ export default function FavoritesPage() {
 
     const fetchStocks = async () => {
         try {
-            const res = await axios.get('http://localhost:8000/api/stocks');
+            const res = await axios.get(`${API_BASE_URL}/api/stocks`);
             // Filter only favorites
             const allStocks: Stock[] = res.data;
             setStocks(allStocks.filter(s => s.is_favorite));
@@ -41,7 +42,7 @@ export default function FavoritesPage() {
 
     const handleStockClick = async (code: string) => {
         try {
-            const res = await axios.get(`http://localhost:8000/api/stocks/${code}`);
+            const res = await axios.get(`${API_BASE_URL}/api/stocks/${code}`);
             setSelectedStock(res.data);
         } catch (e) {
             console.error(e);
@@ -51,7 +52,7 @@ export default function FavoritesPage() {
     const handleToggleFavorite = async (e: React.MouseEvent, code: string) => {
         e.stopPropagation();
         try {
-            const res = await axios.post(`http://localhost:8000/api/stocks/${code}/favorite`);
+            const res = await axios.post(`${API_BASE_URL}/api/stocks/${code}/favorite`);
             const isFav = res.data.is_favorite;
 
             // Update list: remove if unchecked

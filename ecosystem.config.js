@@ -8,7 +8,7 @@ module.exports = {
             // 예(Windows): '.\\venv\\Scripts\\python.exe'
             // 아래는 시스템 PATH에 있는 python을 사용합니다.
             script: 'python',
-            args: '-m uvicorn main:app --host 0.0.0.0 --port 8000',
+            args: '-m uvicorn main:app --host 0.0.0.0 --port 8100',
             autorestart: true,
             watch: false,
         },
